@@ -35,6 +35,10 @@ function start() {
                     value: "ADD_EMPLOYEES"
                 },
                 {
+                    name: "Delete Employees",
+                    value: "DEL_EMPLOYEES"
+                },
+                {
                     name: "Exit Program",
                     value: "QUIT"
                 }
@@ -61,6 +65,9 @@ function start() {
         }
         else if(response.viewChoice === "ADD_EMPLOYEES") {
             addEmployees();
+        }
+        else if(response.viewChoice === "DEL_EMPLOYEES") {
+            deleteEmployees();
         }
         else {
             console.log("No");
@@ -108,30 +115,30 @@ function viewEmployees() {
     });
 }
 
-function addDepartments() {
+// function addDepartment() {
 
-    // Collect/Capture User input (what is the Department Name?)  (Async Function Call)
-    inquirer.prompt(
-        {
-            type: "input",
-            name: "departmentName",
-            message: "What would you like to name your new department?"
-        }).then(response => {
-            // What is our QUERY to ADD a NEW DEPARTMENT (Async Function Call)
-            const query = "INSERT INTO department SET ?";
-            connection.query(query, { name: response.departmentName }, (err, data) => {
-                if(err) {
-                    console.log(err);
-                }
-                console.log(query);
-                console.log(data);
-                start();
-            })
-        }).catch(err => {
-            console.log(err);
-        })
+//     // Collect/Capture User input (what is the Department Name?)  (Async Function Call)
+//     inquirer.prompt(
+//         {
+//             type: "input",
+//             name: "departmentName",
+//             message: "What would you like to name your new department?"
+//         }).then(response => {
+//             // What is our QUERY to ADD a NEW DEPARTMENT (Async Function Call)
+//             const query = "INSERT INTO department SET ?";
+//             connection.query(query, { name: response.departmentName }, (err, data) => {
+//                 if(err) {
+//                     console.log(err);
+//                 }
+//                 console.log(query);
+//                 console.log(data);
+//                 start();
+//             })
+//         }).catch(err => {
+//             console.log(err);
+//         })
 
-}
+// }
 
 function addDepartment() {
 
@@ -212,13 +219,19 @@ function addEmployees() {
         {
             type: "input",
             name: "roleID",
-            message: "Insert into which department? (Type Department ID):",
+            message: "What is the ID of this employee's current role?",
             
+        },
+        {
+            type: "input",
+            name: "managerID",
+            message: "What is their supervisor's ID number?",
+            validation: "integer",
         }
     ]).then(response => {
             // What is our QUERY to ADD a NEW DEPARTMENT (Async Function Call)
-            const query = "INSERT INTO role SET ?";
-            connection.query(query, { title: response.addTitle, salary: response.addSalary, department_id: response.addDepID }, (err, data) => {
+            const query = "INSERT INTO employee SET ?";
+            connection.query(query, { first_name: response.firstName, last_name: response.lastName, role_id: response.roleID, manager_id: response.managerID }, (err, data) => {
                 if(err) {
                     console.log(err);
                 }
@@ -231,6 +244,51 @@ function addEmployees() {
         });
 
 }
+
+function deleteEmployees() {
+     
+        inquirer.prompt([
+            {
+                type: "input",
+                message: "What is the ID of the employee you wish to delete?",
+                name: "employeeID"
+              },
+            //   {
+            //     type: "input",
+            //     message: "What is the last name of the employee you wish to delete?",
+            //     name: "lastName"
+            //   },
+            //   {
+            //     type: "integer",
+            //     message: "What is the ID of this employee's role?",
+            //     name: "roleID"
+            //   },
+            //   {
+            //     type: "integer",
+            //     message: "What is ID of this employee's supervisor?",
+            //     name: "managerID"
+            //   }
+        ])
+         .then(response => {
+            const query = "DELETE FROM employee WHERE ?";
+            
+            connection.query(query, { id: response.employeeID }, (err, data) => {
+                if(err) {
+                    console.log(err);
+                }
+                console.log(query);
+                console.log(data);
+                start();
+            })
+                }).catch(err => {
+                    console.log(err);
+                });
+
+
+    }
+
+
+
 
 // Invoke our START function
 start()
