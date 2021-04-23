@@ -39,6 +39,14 @@ function start() {
                     value: "DEL_EMPLOYEES"
                 },
                 {
+                    name: "Delete Roles",
+                    value: "DEL_ROLES"
+                },
+                {
+                    name: "Delete Departments",
+                    value: "DEL_DEPARTMENTS"
+                },
+                {
                     name: "Exit Program",
                     value: "QUIT"
                 }
@@ -69,9 +77,14 @@ function start() {
         else if(response.viewChoice === "DEL_EMPLOYEES") {
             deleteEmployees();
         }
+        else if(response.viewChoice === "DEL_ROLES") {
+            deleteRoles();
+        }
+        else if(response.viewChoice === "DEL_DEPARTMENTS") {
+            deleteDepartments();
+        }
         else {
-            console.log("No");
-            start();
+            connection.end();
         }
     })
     .catch(err => console.log(err))
@@ -115,30 +128,6 @@ function viewEmployees() {
     });
 }
 
-// function addDepartment() {
-
-//     // Collect/Capture User input (what is the Department Name?)  (Async Function Call)
-//     inquirer.prompt(
-//         {
-//             type: "input",
-//             name: "departmentName",
-//             message: "What would you like to name your new department?"
-//         }).then(response => {
-//             // What is our QUERY to ADD a NEW DEPARTMENT (Async Function Call)
-//             const query = "INSERT INTO department SET ?";
-//             connection.query(query, { name: response.departmentName }, (err, data) => {
-//                 if(err) {
-//                     console.log(err);
-//                 }
-//                 console.log(query);
-//                 console.log(data);
-//                 start();
-//             })
-//         }).catch(err => {
-//             console.log(err);
-//         })
-
-// }
 
 function addDepartment() {
 
@@ -156,7 +145,8 @@ function addDepartment() {
                     console.log(err);
                 }
                 console.log(query);
-                console.log(data);
+                viewDepartments();
+
                 start();
             })
         }).catch(err => {
@@ -193,7 +183,8 @@ function addRoles() {
                     console.log(err);
                 }
                 console.log(query);
-                console.log(data);
+                
+                viewRoles();
                 start();
             })
         }).catch(err => {
@@ -236,7 +227,7 @@ function addEmployees() {
                     console.log(err);
                 }
                 console.log(query);
-                console.log(data);
+                viewEmployees();
                 start();
             })
         }).catch(err => {
@@ -253,21 +244,7 @@ function deleteEmployees() {
                 message: "What is the ID of the employee you wish to delete?",
                 name: "employeeID"
               },
-            //   {
-            //     type: "input",
-            //     message: "What is the last name of the employee you wish to delete?",
-            //     name: "lastName"
-            //   },
-            //   {
-            //     type: "integer",
-            //     message: "What is the ID of this employee's role?",
-            //     name: "roleID"
-            //   },
-            //   {
-            //     type: "integer",
-            //     message: "What is ID of this employee's supervisor?",
-            //     name: "managerID"
-            //   }
+        
         ])
          .then(response => {
             const query = "DELETE FROM employee WHERE ?";
@@ -277,7 +254,63 @@ function deleteEmployees() {
                     console.log(err);
                 }
                 console.log(query);
-                console.log(data);
+                viewEmployees();
+                start();
+            })
+                }).catch(err => {
+                    console.log(err);
+                });
+
+
+    }
+
+    function deleteRoles() {
+     
+        inquirer.prompt([
+            {
+                type: "input",
+                message: "What is the ID of the role you wish to delete?",
+                name: "roleID"
+              },
+
+        ])
+         .then(response => {
+            const query = "DELETE FROM role WHERE ?";
+            
+            connection.query(query, { id: response.roleID }, (err, data) => {
+                if(err) {
+                    console.log(err);
+                }
+                console.log(query);
+                viewRoles();
+                start();
+            })
+                }).catch(err => {
+                    console.log(err);
+                });
+
+
+    }
+
+    function deleteDepartments() {
+     
+        inquirer.prompt([
+            {
+                type: "input",
+                message: "What is the ID of the department that you wish to delete?",
+                name: "departmentID"
+              },
+
+        ])
+         .then(response => {
+            const query = "DELETE FROM department WHERE ?";
+            
+            connection.query(query, { id: response.departmentID }, (err, data) => {
+                if(err) {
+                    console.log(err);
+                }
+                console.log(query);
+                viewDepartments();
                 start();
             })
                 }).catch(err => {
