@@ -35,6 +35,10 @@ function start() {
                     value: "ADD_EMPLOYEES"
                 },
                 {
+                    name: "Update Employee Role",
+                    value: "UPDATE_ROLE"
+                },
+                {
                     name: "Delete Employees",
                     value: "DEL_EMPLOYEES"
                 },
@@ -73,6 +77,9 @@ function start() {
         }
         else if(response.viewChoice === "ADD_EMPLOYEES") {
             addEmployees();
+        }
+        else if(response.viewChoice === "UPDATE_ROLE") {
+            updateRole();
         }
         else if(response.viewChoice === "DEL_EMPLOYEES") {
             deleteEmployees();
@@ -138,7 +145,6 @@ function addDepartment() {
             name: "departmentName",
             message: "What would you like to name your new department?"
         }).then(response => {
-            // What is our QUERY to ADD a NEW DEPARTMENT (Async Function Call)
             const query = "INSERT INTO department SET ?";
             connection.query(query, { name: response.departmentName }, (err, data) => {
                 if(err) {
@@ -147,7 +153,7 @@ function addDepartment() {
                 console.log(query);
                 viewDepartments();
 
-                start();
+                // start();
             })
         }).catch(err => {
             console.log(err);
@@ -176,7 +182,6 @@ function addRoles() {
             
         }
     ]).then(response => {
-            // What is our QUERY to ADD a NEW DEPARTMENT (Async Function Call)
             const query = "INSERT INTO role SET ?";
             connection.query(query, { title: response.addTitle, salary: response.addSalary, department_id: response.addDepID }, (err, data) => {
                 if(err) {
@@ -185,7 +190,7 @@ function addRoles() {
                 console.log(query);
                 
                 viewRoles();
-                start();
+                // start();
             })
         }).catch(err => {
             console.log(err);
@@ -220,7 +225,6 @@ function addEmployees() {
             validation: "integer",
         }
     ]).then(response => {
-            // What is our QUERY to ADD a NEW DEPARTMENT (Async Function Call)
             const query = "INSERT INTO employee SET ?";
             connection.query(query, { first_name: response.firstName, last_name: response.lastName, role_id: response.roleID, manager_id: response.managerID }, (err, data) => {
                 if(err) {
@@ -228,7 +232,7 @@ function addEmployees() {
                 }
                 console.log(query);
                 viewEmployees();
-                start();
+                // start();
             })
         }).catch(err => {
             console.log(err);
@@ -255,7 +259,7 @@ function deleteEmployees() {
                 }
                 console.log(query);
                 viewEmployees();
-                start();
+                // start();
             })
                 }).catch(err => {
                     console.log(err);
@@ -283,7 +287,7 @@ function deleteEmployees() {
                 }
                 console.log(query);
                 viewRoles();
-                start();
+                // start();
             })
                 }).catch(err => {
                     console.log(err);
@@ -311,7 +315,7 @@ function deleteEmployees() {
                 }
                 console.log(query);
                 viewDepartments();
-                start();
+                // start();
             })
                 }).catch(err => {
                     console.log(err);
@@ -320,6 +324,34 @@ function deleteEmployees() {
 
     }
 
+    function updateRole(){
+        inquirer.prompt([
+            {
+                type: "input",
+                name: "id",
+                message: "Which employee would you like to update? (Enter Employee ID)"
+              },
+              {
+                type: "input",
+                name: "role_id",
+                message: "What is the employee's updated role? (Enter Role ID)"
+              }
+            
+        ]).then(response => {
+                const query = "UPDATE employee SET role_id = ? WHERE id = ?";
+                connection.query(query, [response.role_id, response.id], (err, data) => {
+                    if(err) {
+                        console.log(err);
+                    }
+                    console.log(query);
+                    viewEmployees();
+                    // start();
+                })
+            }).catch(err => {
+                console.log(err);
+            });
+    
+    }
 
 
 
