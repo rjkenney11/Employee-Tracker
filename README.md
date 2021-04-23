@@ -22,7 +22,7 @@ This application is useful for businesses of any size to organize and alter the 
 ![Image](https://user-images.githubusercontent.com/74163812/115894365-2ec0d000-a427-11eb-80b8-f6ca790e6552.png)
 <br />
 <br />
-GitHib Link:  https://drive.google.com/file/d/1Qt2LWKdV1bOUa7DcCciheclL3O1fNGxw/view <br /><br />
+Click here to watch a clip of the application in action:  https://drive.google.com/file/d/1Qt2LWKdV1bOUa7DcCciheclL3O1fNGxw/view <br /><br />
 
 ### Contributing:
 Rachel Kenney<br />
